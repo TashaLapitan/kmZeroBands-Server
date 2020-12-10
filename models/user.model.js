@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
-const Band = require('./../models/band.model');
+// const Band = require('./../models/band.model');
 
 const userSchema = new Schema({
   
@@ -9,9 +9,9 @@ const userSchema = new Schema({
     password: String,
     image: String,
     dateOfBirth: String,
-    phoneNumber: [String],
+    phoneNumber: String,
     isBandPOC: {type: Boolean, default: false},
-    bands: [{type: Schema.Types.ObjectId, ref:"Band"}],
+    band: {type: Schema.Types.ObjectId, ref:"Band"},
     gigHistory: [{type: Schema.Types.ObjectId, ref:"Gig"}]
 
 }, 
