@@ -7,7 +7,7 @@ const bandSchema = new Schema({
 
     title: {type: String, required: true},
     description: {type: String, required: true},
-    image: [String],
+    image: String,
     genres: [String],
     phoneNumber: [String],
     contactInfo: {type: String, required: true},

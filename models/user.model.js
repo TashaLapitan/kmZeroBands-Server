@@ -12,8 +12,8 @@ const userSchema = new Schema({
     phoneNumber: String,
     isBandPOC: {type: Boolean, default: false},
     band: {type: Schema.Types.ObjectId, ref:"Band"},
-    gigHistory: [{type: Schema.Types.ObjectId, ref:"Gig"}]
-
+    gigHistory: [{type: Schema.Types.ObjectId, ref:"Gig"}],
+    aboutBio: String
 }, 
 {
   timestamps: true

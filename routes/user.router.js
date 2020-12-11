@@ -41,11 +41,10 @@ router.put('/', (req, res, next)=>{
       return;
     }
     User.findByIdAndUpdate(id, { username, image, dateOfBirth, phoneNumber, aboutBio, isBandPOC }, {new: true})
-      .then(() => {
-        // console.log('RESPONSE AFTER USER PUT REQUEST: ', )
-        // req.session.currentUser = ;
-        // console.log('REQ SESSION CURRENT USER AFTER USER PUT REQUEST ', req.session.currentUser)
-        res.status(200).json();
+      .then((updatedUser) => {
+        // console.log('updatedUser AFTER FINDANDUPDATE: ', updatedUser)
+        // req.session.currentUser = updatedUser
+        res.status(200).json(updatedUser);
       })
       .catch(err => {
         res.status(500).json(err);
@@ -69,14 +68,7 @@ router.delete('/:id', (req, res)=>{
       })
 });
 
-// router.get('/update/:id', (req, res) => {
-//   const {id} = req.params;
-//   User.findById(id)
-//     .then((user) => {
-//       req.session.currentUser = user;
-//       res.status(200).json(user);
-//     })
-// })
+
 
 
 module.exports = router;

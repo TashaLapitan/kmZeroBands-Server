@@ -5,6 +5,7 @@ const Band = require('./../models/band.model');
 
 router.post('/', (req, res, next) => {
     const pocID = req.session.currentUser._id;
+    console.log('POCID: ', req.session.currentUser)
     
     const { title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
 
