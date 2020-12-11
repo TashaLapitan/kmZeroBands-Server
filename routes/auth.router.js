@@ -97,12 +97,9 @@ router.get('/logout',  isLoggedIn, (req, res, next) => {
   } )
 })
 
-
-
-
 router.get('/me', isLoggedIn, (req, res, next) => {
   const currentUserSessionData = req.session.currentUser;
-
+  console.log('/ME ROUTE, USER ID: ', currentUserSessionData._id)
   res.status(200).json(currentUserSessionData);
 
 })

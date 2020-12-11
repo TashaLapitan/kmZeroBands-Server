@@ -6,7 +6,6 @@ const uploader = require("./../config/cloudinary-setup");
 const User = require('./../models/user.model');
 
 router.post('/upload', uploader.single("image"), (req, res, next) => {
-  console.log("file is: ", req.file);
 
   if (!req.file) {
     next(new Error("No file uploaded!"));
@@ -14,7 +13,6 @@ router.post('/upload', uploader.single("image"), (req, res, next) => {
   }
   res.json({ secure_url: req.file.secure_url });
 })
-
 
 router.get('/:id', (req, res) => {
     const { id } = req.params;
@@ -34,18 +32,20 @@ router.get('/:id', (req, res) => {
       })
 });
 
-router.put('/:id', (req, res, next)=>{
+router.put('/', (req, res, next)=>{
 
-    const { id } = req.params;
-    const { username, image, dateOfBirth, phoneNumber, aboutBio } = req.body;
-    console.log("PUT REQUEST WORKING")
+    const id = req.session.currentUser._id;
+    const { username, image, dateOfBirth, phoneNumber, aboutBio, isBandPOC } = req.body;
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(400).json({ message: 'Specified id is not valid' });
       return;
     }
-    User.findByIdAndUpdate(id, { username, image, dateOfBirth, phoneNumber, aboutBio })
+    User.findByIdAndUpdate(id, { username, image, dateOfBirth, phoneNumber, aboutBio, isBandPOC }, {new: true})
       .then(() => {
-        res.status(200).send();
+        // console.log('RESPONSE AFTER USER PUT REQUEST: ', )
+        // req.session.currentUser = ;
+        // console.log('REQ SESSION CURRENT USER AFTER USER PUT REQUEST ', req.session.currentUser)
+        res.status(200).json();
       })
       .catch(err => {
         res.status(500).json(err);
@@ -68,6 +68,15 @@ router.delete('/:id', (req, res)=>{
         res.status(500).json(err);
       })
 });
+
+// router.get('/update/:id', (req, res) => {
+//   const {id} = req.params;
+//   User.findById(id)
+//     .then((user) => {
+//       req.session.currentUser = user;
+//       res.status(200).json(user);
+//     })
+// })
 
 
 module.exports = router;

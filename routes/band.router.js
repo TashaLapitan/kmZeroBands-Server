@@ -2,13 +2,13 @@ const express = require('express');
 const mongoose = require ('mongoose');
 const router = express.Router();
 const Band = require('./../models/band.model');
-const User = require("../models/user.model");
 
 router.post('/', (req, res, next) => {
-    const pocID = req.session.currentUser._id 
-    const { title, description, imageUrl, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
+    const pocID = req.session.currentUser._id;
+    
+    const { title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
 
-    Band.create ({ title, description, imageUrl, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod, pocID})
+    Band.create ({ title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod, pocID})
         .then((createdBand) => {
             res
                 .status(201)
@@ -52,12 +52,12 @@ router.get('/:id', (req, res) => {
 
 router.put('/:id', (req, res, next)=>{
     const { id } = req.params;
-    const { title, description, imageUrl, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
+    const { title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(400).json({ message: 'Specified id is not valid' });
       return;
     }
-    Band.findByIdAndUpdate(id, { title, description, imageUrl, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod })
+    Band.findByIdAndUpdate(id, { title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod })
       .then(() => {
         res.status(200).send();
       })
