@@ -2,18 +2,34 @@ const express = require('express');
 const mongoose = require ('mongoose');
 const router = express.Router();
 const Band = require('./../models/band.model');
+const User = require('./../models/user.model');
 
 router.post('/', (req, res, next) => {
     const pocID = req.session.currentUser._id;
-    console.log('POCID: ', req.session.currentUser)
     
-    const { title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
+    const { title, description, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
 
-    Band.create ({ title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod, pocID})
+    Band.create ({ title, description, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod, pocID})
         .then((createdBand) => {
-            res
-                .status(201)
-                .json(createdBand);
+            console.log('createdBand._id', createdBand._id) 
+            const bandID = createdBand._id;
+            return bandID;
+        })
+        .then((bandID) => {
+          console.log('bandID ', bandID) 
+          const pr = User.findByIdAndUpdate(pocID, {isBandPOC: true}, {new: true}) // WORKS BUT {band: bandID} is not adding to user document
+          return pr
+        })
+        .then(updatedUser => {
+          console.log('updatedUser', updatedUser) // CORRECT
+          req.session.currentUser = updatedUser;
+          return updatedUser.band;
+        })
+        .then((createdBand) => {   //UNDEFINED BECAUSE THE BAND WASN'T ADDED TO THE USER DOCUMENT
+              console.log('createdBand', createdBand)
+              res
+                  .status(201)
+                  .json(createdBand);
         })
         .catch((err) => {
             res

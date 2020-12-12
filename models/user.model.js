@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
-// const Band = require('./../models/band.model');
+const Band = require('./../models/band.model');
 
 const userSchema = new Schema({
   

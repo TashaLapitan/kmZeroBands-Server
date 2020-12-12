@@ -42,8 +42,6 @@ router.put('/', (req, res, next)=>{
     }
     User.findByIdAndUpdate(id, { username, image, dateOfBirth, phoneNumber, aboutBio, isBandPOC }, {new: true})
       .then((updatedUser) => {
-        // console.log('updatedUser AFTER FINDANDUPDATE: ', updatedUser)
-        // req.session.currentUser = updatedUser
         res.status(200).json(updatedUser);
       })
       .catch(err => {
