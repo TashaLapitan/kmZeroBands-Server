@@ -7,6 +7,7 @@ const gigSchema = new Schema({
     
     title: {type: String, required: true},
     description: {type: String, required: true},
+    city: String,
     date: Date,
     durationHours: Number,
     genre: String,

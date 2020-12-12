@@ -9,9 +9,9 @@ const User = require('./../models/user.model');
 router.post('/', (req, res, next) => {
     const pocID = req.session.currentUser._id;
     
-    const { title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
+    const { title, description, image, city, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
 
-    Band.create ({ title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod, pocID})
+    Band.create ({ title, description, image, city, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod, pocID})
         .then((createdBand) => {
             const bandID = createdBand._id;
             return bandID;

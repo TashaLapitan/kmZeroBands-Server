@@ -25,6 +25,7 @@ router.get('/:id', (req, res) => {
     User
       .findById( id )
       .populate('band')
+      .populate('gigHistory')
       .then( (foundUser) => {
         res.status(200).json(foundUser);  
       })
@@ -36,12 +37,12 @@ router.get('/:id', (req, res) => {
 router.put('/', (req, res, next)=>{
 
     const id = req.session.currentUser._id;
-    const { username, image, dateOfBirth, phoneNumber, aboutBio, isBandPOC } = req.body;
+    const { username, image, dateOfBirth, phoneNumber, aboutBio } = req.body;
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(400).json({ message: 'Specified id is not valid' });
       return;
     }
-    User.findByIdAndUpdate(id, { username, image, dateOfBirth, phoneNumber, aboutBio, isBandPOC }, {new: true})
+    User.findByIdAndUpdate(id, { username, image, dateOfBirth, phoneNumber, aboutBio }, {new: true})
       .then((updatedUser) => {
         res.status(200).json(updatedUser);
       })

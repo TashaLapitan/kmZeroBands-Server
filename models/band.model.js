@@ -11,10 +11,11 @@ const bandSchema = new Schema({
     genres: [String],
     phoneNumber: String,
     contactInfo: {type: String, required: true},
+    city: String,
     instagramUrl: String,
     youtubeUrl: String,
     pocID: {type: Schema.Types.ObjectId, ref:'User'},
-    // gigsHistory: [{type: Schema.Types.ObjectId, ref:"Gig", default: []}],
+    gigsHistory: [{type: Schema.Types.ObjectId, ref:"Gig"}],
     pricePerHour: Number,
     canCustomizePlaylist: {type: Boolean, default: false},
     minNoticePeriod: Number

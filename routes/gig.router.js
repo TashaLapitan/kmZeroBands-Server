@@ -7,8 +7,8 @@ const User = require('./../models/user.model');
 
 router.post('/', (req, res, next) => {
     const clientID = req.session.currentUser._id; 
-    const { title, description, durationHours, date, genre, pricePerHour} = req.body;
-    Gig.create ({ title, description, date, genre, clientID, durationHours, pricePerHour, isPending: true})
+    const { title, description, date, city, genre, durationHours, pricePerHour} = req.body;
+    Gig.create ({ title, description, date, city, genre, durationHours, pricePerHour, clientID, isPending: true})
         .then((newGig) => {
             User.findByIdAndUpdate(clientID, {$push: {gigHistory: newGig._id}})
               .then(() => {
@@ -27,7 +27,9 @@ router.post('/', (req, res, next) => {
 router.get('/', (req, res, next) => {
     Gig
       .find()
+      .populate('clientID')
       .then( (allGigs) => {
+        console.log('allGigs', allGigs)
         res.status(200).json(allGigs);
       })
       .catch(err => {
