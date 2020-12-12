@@ -1,42 +1,44 @@
 const express = require('express');
 const mongoose = require ('mongoose');
 const router = express.Router();
+const uploader = require("./../config/cloudinary-setup");
+
 const Band = require('./../models/band.model');
 const User = require('./../models/user.model');
 
 router.post('/', (req, res, next) => {
     const pocID = req.session.currentUser._id;
     
-    const { title, description, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
+    const { title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
 
-    Band.create ({ title, description, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod, pocID})
+    Band.create ({ title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod, pocID})
         .then((createdBand) => {
-            console.log('createdBand._id', createdBand._id) 
             const bandID = createdBand._id;
             return bandID;
         })
         .then((bandID) => {
-          console.log('bandID ', bandID) 
-          const pr = User.findByIdAndUpdate(pocID, {isBandPOC: true}, {new: true}) // WORKS BUT {band: bandID} is not adding to user document
+          const pr = User.findByIdAndUpdate(pocID, {isBandPOC: true, band: bandID}, {new: true}) 
           return pr
         })
         .then(updatedUser => {
-          console.log('updatedUser', updatedUser) // CORRECT
           req.session.currentUser = updatedUser;
           return updatedUser.band;
         })
-        .then((createdBand) => {   //UNDEFINED BECAUSE THE BAND WASN'T ADDED TO THE USER DOCUMENT
-              console.log('createdBand', createdBand)
-              res
-                  .status(201)
-                  .json(createdBand);
+        .then((newBandID) => {   
+          const pr = Band.findById(newBandID)
+          return pr 
+        })
+        .then(newBand => {
+          res 
+            .status(201)
+            .json(newBand);
         })
         .catch((err) => {
             res
                 .status(500) 
                 .json(err)
         })
-})
+});
 
 router.get('/', (req, res, next) => {
     Band
@@ -75,8 +77,8 @@ router.put('/:id', (req, res, next)=>{
       return;
     }
     Band.findByIdAndUpdate(id, { title, description, image, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod })
-      .then(() => {
-        res.status(200).send();
+      .then((response) => {
+        res.status(200).json(response.data);
       })
       .catch(err => {
         res.status(500).json(err);
@@ -85,6 +87,7 @@ router.put('/:id', (req, res, next)=>{
 
 router.delete('/:id', (req, res)=>{
     const { id } = req.params;
+    const userID = req.session.currentUser._id;
     if ( !mongoose.Types.ObjectId.isValid(id)) {
       res.status(400).json({ message: 'Specified id is not valid' });
       return;
@@ -95,10 +98,25 @@ router.delete('/:id', (req, res)=>{
           .status(202)  
           .send(`Document ${id} was removed successfully.`);
       })
+      .then(() => {
+        const pr = User.findByIdAndUpdate(userID, {isBandPOC: false, band: undefined}, {new: true})
+        return pr;
+      })
+      .then((updatedUser) => {
+        req.session.currentUser = updatedUser;
+      })
       .catch( err => {
         res.status(500).json(err);
       })
 });
 
+router.post('/upload', uploader.single("image"), (req, res, next) => {
+
+  if (!req.file) {
+    next(new Error("No file uploaded!"));
+    return;
+  }
+  res.json({ secure_url: req.file.secure_url });
+})
 
 module.exports = router;

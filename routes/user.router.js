@@ -24,6 +24,7 @@ router.get('/:id', (req, res) => {
     }
     User
       .findById( id )
+      .populate('band')
       .then( (foundUser) => {
         res.status(200).json(foundUser);  
       })

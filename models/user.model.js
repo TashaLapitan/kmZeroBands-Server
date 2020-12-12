@@ -10,7 +10,7 @@ const userSchema = new Schema({
     image: String,
     dateOfBirth: String,
     phoneNumber: String,
-    isBandPOC: {type: Boolean, default: false},
+    isBandPOC: {type: Boolean, default: false, required: true},
     band: {type: Schema.Types.ObjectId, ref:"Band"},
     gigHistory: [{type: Schema.Types.ObjectId, ref:"Gig"}],
     aboutBio: String
