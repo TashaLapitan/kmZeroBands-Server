@@ -57,22 +57,19 @@ router.post('/login', isNotLoggedIn, validationLogin, (req, res, next) => {
 
   User.findOne({ email })
     .then( (user) => {
-      if (! user) {
-          
+      if (!user) {
         return next( createError(404)  );  
       }
 
       const passwordIsValid = bcrypt.compareSync(password, user.password); 
 
       if (passwordIsValid) {
-       
         user.password = "*";
         req.session.currentUser = user;
 
         res
           .status(200)
           .json(user);
-
       }
       else {
         next( createError(401) ); 
