@@ -24,12 +24,23 @@ router.post('/', (req, res, next) => {
         })
 })
 
+router.get('/search/:city', (req, res, next) => {
+  const {city} = req.params;
+  Gig.find({city})
+    .populate('clientID')
+    .then((foundGigs) => {
+      res.status(200).json(foundGigs);
+    })
+    .catch(err => {
+        res.status(500).json(err);
+    })
+})
+
 router.get('/', (req, res, next) => {
     Gig
       .find()
       .populate('clientID')
       .then( (allGigs) => {
-        console.log('allGigs', allGigs)
         res.status(200).json(allGigs);
       })
       .catch(err => {
