@@ -37,12 +37,12 @@ router.get('/:id', (req, res) => {
 router.put('/', (req, res, next)=>{
 
     const id = req.session.currentUser._id;
-    const { username, image, dateOfBirth, phoneNumber, aboutBio } = req.body;
+    const { username, image, phoneNumber, aboutBio } = req.body;
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(400).json({ message: 'Specified id is not valid' });
       return;
     }
-    User.findByIdAndUpdate(id, { username, image, dateOfBirth, phoneNumber, aboutBio }, {new: true})
+    User.findByIdAndUpdate(id, { username, image, phoneNumber, aboutBio }, {new: true})
       .then((updatedUser) => {
         res.status(200).json(updatedUser);
       })

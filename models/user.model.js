@@ -8,7 +8,6 @@ const userSchema = new Schema({
     email: {type: String, unique: true, required: true},
     password: String,
     image: String,
-    dateOfBirth: String,
     phoneNumber: String,
     isBandPOC: {type: Boolean, default: false, required: true},
     band: {type: Schema.Types.ObjectId, ref:"Band"},

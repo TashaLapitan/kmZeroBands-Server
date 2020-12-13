@@ -18,7 +18,7 @@ const bandSchema = new Schema({
     gigsHistory: [{type: Schema.Types.ObjectId, ref:"Gig"}],
     pricePerHour: Number,
     canCustomizePlaylist: {type: Boolean, default: false},
-    minNoticePeriod: Number
+    minNoticePeriod: {type: Number, default: 0}
 
 }, 
 {
