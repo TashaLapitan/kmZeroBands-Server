@@ -10,8 +10,9 @@ router.post('/', (req, res, next) => {
     const pocID = req.session.currentUser._id;
     
     const { title, description, image, city, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod } = req.body;
+    const endpoint = title.toLowerCase().split(" ").join("-");
 
-    Band.create ({ title, description, image, city, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod, pocID})
+    Band.create ({ title, endpoint, description, image, city, genres, phoneNumber, contactInfo, instagramUrl, youtubeUrl, pricePerHour, canCustomizePlaylist, minNoticePeriod, pocID})
         .then((createdBand) => {
             const bandID = createdBand._id;
             return bandID;
@@ -43,6 +44,7 @@ router.post('/', (req, res, next) => {
 router.get('/', (req, res, next) => {
     Band
       .find()
+      .populate('pocID')
       .then( (allBands) => {
         res.status(200).json(allBands);
       })
