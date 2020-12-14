@@ -18,7 +18,7 @@ const gigRouter = require('./routes/gig.router');
 // MONGOOSE CONNECTION
 
 mongoose
-  .connect(`${process.env.MONGODB_URI}`, {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useFindAndModify: false
   })
@@ -33,7 +33,9 @@ mongoose
 
   app.use(cors({
     credentials: true,
-    origin: ['http://localhost:3000'] 
+    origin: ['http://localhost:3000',
+            'https://zero-km-bands.herokuapp.com/',
+            'http://zero-km-bands.herokuapp.com/'] 
   }));
 
 app.use(
@@ -68,6 +70,17 @@ app.use('/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/bands', bandRouter);
 app.use('/api/gigs', gigRouter);
+
+// ROUTE FOR SERVING REACT APP (index.html)
+app.use((req, res, next) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
+
+app.use((req, res, next) => {
+  res
+    .status(404)
+    .json({code: 'not found'});
+})
 
 
 
