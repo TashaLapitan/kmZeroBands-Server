@@ -12,8 +12,7 @@ const userSchema = new Schema({
     isBandPOC: {type: Boolean, default: false, required: true},
     band: {type: Schema.Types.ObjectId, ref:"Band"},
     gigHistory: [{type: Schema.Types.ObjectId, ref:"Gig"}],
-    aboutBio: String,
-    hasUnreadMsg: {type: Boolean, default: false}
+    aboutBio: String
 }, 
 {
   timestamps: true
