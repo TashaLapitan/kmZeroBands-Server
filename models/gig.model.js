@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
-const Band = require('./../models/band.model');
-const User = require("../models/user.model");
+
+const responseSubschema = require('./gig.response.subschema');
 
 const gigSchema = new Schema({
     
@@ -12,7 +12,7 @@ const gigSchema = new Schema({
     durationHours: Number,
     genre: String,
     clientID: {type: Schema.Types.ObjectId, ref:"User"},
-    bandID: {type: Schema.Types.ObjectId, ref:"Band"},
+    bandResponses: [ responseSubschema ],
     pricePerHour: Number,
     isPending: {type: Boolean, default: true, required: true}
 }, 

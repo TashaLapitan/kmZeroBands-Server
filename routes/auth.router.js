@@ -87,7 +87,6 @@ router.get('/logout',  isLoggedIn, (req, res, next) => {
     if (err) {
       return next(err);
     }
-
     res
       .status(204)  
       .send();

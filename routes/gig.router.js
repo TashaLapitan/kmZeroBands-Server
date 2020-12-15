@@ -81,6 +81,25 @@ router.put('/:id', (req, res, next)=>{
       })
 });
 
+router.put(`/response/:id`, (req, res, next) => {
+  const {id} = req.params;
+  const {bandID, comment} = req.body;
+  const responseObj = {bandID, comment, isRead: false}
+
+  Gig.findByIdAndUpdate(id, {$push: {bandResponses: responseObj}}, {new: true})
+    .then((response) => {
+      const updatedGig = response;
+      const userID = updatedGig.clientID;
+        User.findByIdAndUpdate(userID, {hasUnreadMsg: true})
+          .then((response) => {
+            res.status(200).json(response);
+          })
+    })
+    .catch(err => {
+      res.status(500).json(err);
+    })
+})
+
 router.delete('/:id', (req, res)=>{
     const { id } = req.params;
     console.log('GIG id TO DELETE ', id)
