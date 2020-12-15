@@ -39,7 +39,6 @@ router.get('/search/:city', (req, res, next) => {
 router.get('/', (req, res, next) => {
     Gig
       .find()
-      .populate('clientID')
       .then( (allGigs) => {
         res.status(200).json(allGigs);
       })
@@ -68,14 +67,14 @@ router.get('/:id', (req, res) => {
 
 router.put('/:id', (req, res, next)=>{
     const { id } = req.params;
-    const { title, description, durationHours, date, genres, pricePerHour, isPending } = req.body;
+    const { title, description, city, date, genre, durationHours, pricePerHour } = req.body;
     if (!mongoose.Types.ObjectId.isValid(id)) {
       res.status(400).json({ message: 'Specified id is not valid' });
       return;
     }
-    Gig.findByIdAndUpdate(id, { title, description, durationHours, date, genres, pricePerHour, isPending })
-      .then(() => {
-        res.status(200).send();
+    Gig.findByIdAndUpdate(id, {title, description, city, date, genre, durationHours, pricePerHour }, {new: true})
+      .then((response) => {
+        res.status(200).json(response);
       })
       .catch(err => {
         res.status(500).json(err);
@@ -84,6 +83,7 @@ router.put('/:id', (req, res, next)=>{
 
 router.delete('/:id', (req, res)=>{
     const { id } = req.params;
+    console.log('GIG id TO DELETE ', id)
     if ( !mongoose.Types.ObjectId.isValid(id)) {
       res.status(400).json({ message: 'Specified id is not valid' });
       return;
