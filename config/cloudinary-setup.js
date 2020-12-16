@@ -14,7 +14,7 @@ const storage =  cloudinaryStorage({
   cloudinary,
   folder: "km-zero-bands-storage", 
   allowedFormats: ['jpg', 'png', 'jpeg', 'gif'],
-  transformation: [{ width: 120, height: 90, crop: 'fill' }],
+  // transformation: [{ width: 120, height: 90, crop: 'fill' }],
   filename: function (req, res, cb) {
     let fileName = res.originalname.split(".");
     cb(null, fileName[0]); 

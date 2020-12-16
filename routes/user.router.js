@@ -44,6 +44,7 @@ router.put('/', (req, res, next)=>{
     }
     User.findByIdAndUpdate(id, { username, image, phoneNumber, aboutBio }, {new: true})
       .then((updatedUser) => {
+        req.session.currentUser = updatedUser;
         res.status(200).json(updatedUser);
       })
       .catch(err => {
