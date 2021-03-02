@@ -1,21 +1,30 @@
 const express = require('express');
 const mongoose = require ('mongoose');
+
 const router = express.Router();
 const Gig = require('./../models/gig.model');
 const User = require('./../models/user.model');
 
 
 router.post('/', (req, res, next) => {
-    const clientID = req.session.currentUser._id; 
+
+    const clientID = req.session.currentUser ? req.session.currentUser._id : undefined;
+
     const { title, description, date, city, genre, durationHours, pricePerHour} = req.body;
     Gig.create ({ title, description, date, city, genre, durationHours, pricePerHour, clientID, isPending: true})
         .then((newGig) => {
-            User.findByIdAndUpdate(clientID, {$push: {gigHistory: newGig._id}})
+            if (clientID) {
+              User.findByIdAndUpdate(clientID, {$push: {gigHistory: newGig._id}})
               .then(() => {
                 res
                 .status(201)
                 .json(newGig);
               })
+            } else {
+              res
+                .status(201)
+                .json(newGig);
+            }
         })
         .catch((err) => {
             res

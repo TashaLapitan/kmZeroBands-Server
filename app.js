@@ -20,7 +20,8 @@ const gigRouter = require('./routes/gig.router');
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useCreateIndex: true
   })
   .then(x => {
     console.log(
