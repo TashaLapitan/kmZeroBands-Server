@@ -9,7 +9,6 @@ const User = require('./../models/user.model');
 router.post('/', (req, res, next) => {
 
     const clientID = req.session.currentUser ? req.session.currentUser._id : undefined;
-    console.log(clientID)
 
     const { title, description, date, city, genre, durationHours, pricePerHour} = req.body;
     Gig.create ({ title, description, date, city, genre, durationHours, pricePerHour, clientID, isPending: true})

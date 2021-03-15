@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
-const ObjectId = require('mongodb').ObjectID;
 
 const responseSubschema = require('./gig.response.subschema');
 
